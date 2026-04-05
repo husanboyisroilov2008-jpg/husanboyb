@@ -1,3 +1,4 @@
+const { connectLambda } = require('@netlify/blobs');
 const { badRequest, methodNotAllowed, ok, serverError } = require('./_lib/response');
 const { createPasswordHash, isValidEmail, normalizeEmail, validatePassword } = require('./_lib/password');
 const { findUserByEmail, getPendingVerification, setPendingVerification } = require('./_lib/storage');
@@ -20,7 +21,10 @@ function maskEmail(email) {
 
 exports.handler = async function handler(event) {
   try {
+    connectLambda(event);
+
     if (event.httpMethod !== 'POST') return methodNotAllowed(['POST']);
+
     const body = JSON.parse(event.body || '{}');
     const email = normalizeEmail(body.email || '');
     const password = String(body.password || '');
@@ -50,21 +54,29 @@ exports.handler = async function handler(event) {
     const sentAt = new Date().toISOString();
     const expiresAt = new Date(Date.now() + EXPIRY_MINUTES * 60 * 1000).toISOString();
 
-    await setPendingVerification(email, {
-      code,
-      sentAt,
-      expiresAt,
-      attempts: 0,
-      verified: false,
-      ...passwordRecord
-    }, 'signup');
+    await setPendingVerification(
+      email,
+      {
+        code,
+        sentAt,
+        expiresAt,
+        attempts: 0,
+        verified: false,
+        ...passwordRecord
+      },
+      'signup'
+    );
 
     const siteName = getSiteName();
     const siteTagline = getSiteTagline();
     const siteBaseUrl = getSiteBaseUrl(event);
-    if (!siteBaseUrl) return badRequest('Sayt URL aniqlanmadi. SITE_BASE_URL ni kiriting yoki Netlify domenini tekshiring.');
+
+    if (!siteBaseUrl) {
+      return badRequest('Sayt URL aniqlanmadi. SITE_BASE_URL ni kiriting yoki Netlify domenini tekshiring.');
+    }
 
     const identity = getMailIdentity();
+
     await mailer.sendMail({
       from: `${identity.fromName} <${identity.fromEmail}>`,
       to: email,
