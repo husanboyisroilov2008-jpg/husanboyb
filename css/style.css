@@ -422,6 +422,7 @@ h1, h2, h3, h4 { margin: 0 0 14px; line-height: 1.06; }
   place-items: center;
   z-index: 80;
 }
+
 .welcome-card {
   width: min(560px, calc(100% - 32px));
   padding: 34px;
@@ -433,17 +434,37 @@ h1, h2, h3, h4 { margin: 0 0 14px; line-height: 1.06; }
   position: relative;
   overflow: hidden;
 }
+
+/* MUHIM FIX */
+.welcome-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .sparkles::before,
 .sparkles::after {
   content: "";
   position: absolute;
   inset: -20%;
-  background: radial-gradient(circle, rgba(0,209,255,.32) 0, transparent 18%), radial-gradient(circle, rgba(43,92,255,.28) 0, transparent 20%);
+  background:
+    radial-gradient(circle, rgba(0,209,255,.32) 0, transparent 18%),
+    radial-gradient(circle, rgba(43,92,255,.28) 0, transparent 20%);
   background-size: 180px 180px;
   opacity: .24;
   animation: spin 18s linear infinite;
+  pointer-events: none;
 }
-.sparkles::after { animation-direction: reverse; }
+
+.sparkles::after {
+  animation-direction: reverse;
+}
 
 .admin-top,
 .card-head,
