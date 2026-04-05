@@ -8,15 +8,10 @@ exports.handler = async function handler(event) {
   try {
     connectLambda(event);
 
-    if (event.httpMethod !== 'POST') {
-      return methodNotAllowed(['POST']);
-    }
+    if (event.httpMethod !== 'POST') return methodNotAllowed(['POST']);
 
     const body = JSON.parse(event.body || '{}');
-
-    if (!body.credential) {
-      return badRequest('Google credential yuborilmadi.');
-    }
+    if (!body.credential) return badRequest('Google credential yuborilmadi.');
 
     const payload = await verifyGoogleCredential(body.credential);
     const now = new Date().toISOString();
