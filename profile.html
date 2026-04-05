@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profil — EduFlow Hub</title>
+  <meta name="description" content="EduFlow Hub foydalanuvchi profili, auth usullari va community statistikasi." />
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="theme-night profile-body">
+  <div class="page-bg">
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+  </div>
+
+  <header class="site-header container compact-header">
+    <a class="brand small-brand" href="/index.html">
+      <img src="/assets/logo.svg" alt="EduFlow Hub" class="brand-logo small" />
+    </a>
+    <nav class="top-nav">
+      <a href="/index.html">Bosh sahifa</a>
+      <a href="/admin.html" class="footer-admin-link">Admin</a>
+      <button id="logout-btn" class="nav-pill nav-button" type="button">Log out</button>
+    </nav>
+  </header>
+
+  <main class="container profile-layout">
+    <section class="profile-main glass reveal-up">
+      <div class="profile-header">
+        <div class="avatar-wrap">
+          <img id="profile-avatar" src="/assets/icon-192.png" alt="User avatar" class="profile-avatar" />
+        </div>
+        <div>
+          <span class="section-kicker">Sizning profilingiz</span>
+          <h1 id="profile-name">Ma’lumot yuklanmoqda…</h1>
+          <p id="profile-email" class="muted">Email tekshirilmoqda…</p>
+          <div id="auth-methods" class="auth-method-badges"></div>
+        </div>
+      </div>
+
+      <div class="profile-grid">
+        <article class="info-panel">
+          <h3>Shaxsiy ma’lumot</h3>
+          <dl class="info-list">
+            <div><dt>Ism</dt><dd id="given-name">—</dd></div>
+            <div><dt>Familiya</dt><dd id="family-name">—</dd></div>
+            <div><dt>A’zolik sanasi</dt><dd id="joined-date">—</dd></div>
+            <div><dt>So‘nggi login</dt><dd id="last-login">—</dd></div>
+          </dl>
+        </article>
+
+        <article class="info-panel emphasis-panel">
+          <h3>Bildirishnomalar</h3>
+          <p>Admin yuboradigan community yangiliklari va maxsus takliflar email orqali kelishini shu yerdan boshqaring.</p>
+          <label class="switch-row">
+            <span>Email xabarlarini olish</span>
+            <input id="email-optin" type="checkbox" />
+          </label>
+          <button id="save-preferences-btn" class="button button-primary full" type="button">Saqlash</button>
+        </article>
+      </div>
+    </section>
+
+    <aside class="profile-side reveal-up delay-1">
+      <div class="glass side-card">
+        <span class="section-kicker">Community snapshot</span>
+        <h2>EduFlow ichidagi faollik</h2>
+        <div class="side-stats profile-quad-stats">
+          <article>
+            <strong id="community-users">—</strong>
+            <span>A’zolar soni</span>
+          </article>
+          <article>
+            <strong id="community-subscribers">—</strong>
+            <span>Email obunachilar</span>
+          </article>
+          <article>
+            <strong id="community-new-today">—</strong>
+            <span>Bugun qo‘shilganlar</span>
+          </article>
+          <article>
+            <strong id="community-linked">—</strong>
+            <span>Link qilingan accountlar</span>
+          </article>
+        </div>
+      </div>
+
+      <div class="glass side-card">
+        <span class="section-kicker">Tavsiya</span>
+        <h3>Siz uchun keyingi qadam</h3>
+        <p id="personalized-tip">Profil asosida moslashtirilgan tavsiya yuklanmoqda…</p>
+      </div>
+    </aside>
+  </main>
+
+  <div id="welcome-overlay" class="welcome-overlay hidden" aria-hidden="true">
+    <div class="welcome-card">
+      <div class="sparkles"></div>
+      <span class="section-kicker">Xush kelibsiz</span>
+      <h2 id="welcome-message">EduFlow Hub’ga xush kelibsiz!</h2>
+      <p>Profilingiz muvaffaqiyatli tayyor bo‘ldi. Endi workshoplar, community yangiliklari va takliflar sizga ochildi.</p>
+      <button id="close-welcome-btn" class="button button-primary" type="button">Davom etish</button>
+    </div>
+  </div>
+
+  <div id="toast-root" class="toast-root"></div>
+
+  <script src="/js/common.js"></script>
+  <script src="/js/profile.js"></script>
+</body>
+</html>

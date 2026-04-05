@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#071127"/>
+      <stop offset="100%" stop-color="#12315f"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#2b5cff"/>
+      <stop offset="100%" stop-color="#00d1ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1040" cy="120" r="170" fill="#1d5cff" fill-opacity="0.16"/>
+  <circle cx="170" cy="520" r="210" fill="#00d1ff" fill-opacity="0.10"/>
+  <rect x="78" y="82" width="1044" height="466" rx="42" fill="#08162f" stroke="#2c5be0" stroke-opacity="0.55"/>
+  <g transform="translate(132 145)">
+    <rect width="150" height="150" rx="36" fill="url(#card)"/>
+    <path d="M46 38h48c18 0 29 11 29 26s-11 26-29 26H69v18h38c18 0 29 11 29 26s-11 24-29 24H46V38z" fill="#fff"/>
+  </g>
+  <text x="330" y="206" fill="#ffffff" font-size="66" font-weight="700" font-family="Arial, Helvetica, sans-serif">EduFlow Hub</text>
+  <text x="330" y="270" fill="#a9c5ff" font-size="31" font-family="Arial, Helvetica, sans-serif">Workshops, mentor sessions, and premium community updates.</text>
+  <text x="138" y="418" fill="#ffffff" font-size="29" font-family="Arial, Helvetica, sans-serif">• Member profile with welcome experience</text>
+  <text x="138" y="468" fill="#ffffff" font-size="29" font-family="Arial, Helvetica, sans-serif">• Google + Email access in one flow</text>
+  <text x="138" y="518" fill="#ffffff" font-size="29" font-family="Arial, Helvetica, sans-serif">• Admin broadcast with logo, banner, and delivery report</text>
+  <rect x="836" y="400" width="214" height="68" rx="20" fill="url(#card)"/>
+  <text x="878" y="443" fill="#ffffff" font-size="29" font-weight="700" font-family="Arial, Helvetica, sans-serif">Open member app</text>
+</svg>

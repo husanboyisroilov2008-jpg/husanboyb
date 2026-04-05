@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="168" viewBox="0 0 560 168" role="img" aria-label="EduFlow Hub logo">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#2b5cff"/>
+      <stop offset="100%" stop-color="#00d1ff"/>
+    </linearGradient>
+    <linearGradient id="s" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0b1730"/>
+      <stop offset="100%" stop-color="#071127"/>
+    </linearGradient>
+  </defs>
+  <rect width="560" height="168" rx="34" fill="url(#s)"/>
+  <g transform="translate(22 20)">
+    <rect width="128" height="128" rx="30" fill="url(#g)"/>
+    <path d="M34 34h40c16 0 27 10 27 23S90 80 74 80H54v15h32c16 0 27 10 27 23s-11 22-27 22H34V34z" fill="#fff"/>
+    <circle cx="89" cy="46" r="10" fill="#dff7ff" fill-opacity=".45"/>
+  </g>
+  <text x="178" y="76" fill="#ffffff" font-size="44" font-weight="700" font-family="Arial, Helvetica, sans-serif">EduFlow Hub</text>
+  <text x="178" y="112" fill="#9fc0ff" font-size="20" font-family="Arial, Helvetica, sans-serif">Workshops, mentors, and private member spaces.</text>
+</svg>

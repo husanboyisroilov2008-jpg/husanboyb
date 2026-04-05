@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin panel — EduFlow Hub</title>
+  <meta name="description" content="EduFlow Hub admin paneli: user statistikasi, auth breakdown va brendlangan email broadcast." />
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="theme-night admin-body">
+  <div class="page-bg">
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+    <div class="orb orb-c"></div>
+  </div>
+
+  <header class="site-header container compact-header">
+    <a class="brand small-brand" href="/index.html">
+      <img src="/assets/logo.svg" alt="EduFlow Hub" class="brand-logo small" />
+    </a>
+    <nav class="top-nav">
+      <a href="/profile.html">Profil</a>
+      <a href="/index.html">Bosh sahifa</a>
+      <button id="admin-logout-btn" class="nav-pill nav-button" type="button">Admin chiqish</button>
+    </nav>
+  </header>
+
+  <main class="container admin-layout">
+    <section id="admin-auth-card" class="glass admin-auth reveal-up compact-auth-card">
+      <span class="section-kicker">Hidden admin access</span>
+      <h1>Admin kirish</h1>
+      <p id="admin-auth-status">Avval oddiy account bilan kiring, keyin admin kodni kiriting.</p>
+      <div class="code-input-wrap compact-row">
+        <input id="admin-code" type="password" autocomplete="off" placeholder="Admin kod" />
+        <button id="admin-login-btn" class="button button-primary" type="button">Kirish</button>
+      </div>
+      <div class="hint-box small-hint">
+        <strong>Maslahat:</strong> production uchun kodni almashtiring va kerak bo‘lsa ADMIN_ALLOWED_EMAILS bilan admin emaillarni cheklang.
+      </div>
+    </section>
+
+    <section id="admin-panel" class="hidden">
+      <div class="admin-top glass reveal-up">
+        <div>
+          <span class="section-kicker">Broadcast studio</span>
+          <h1>Admin overview</h1>
+          <p id="admin-user-line" class="muted">Admin sessiya tekshirilmoqda…</p>
+        </div>
+      </div>
+
+      <section class="admin-stats-grid reveal-up delay-1">
+        <article class="glass stat-card"><strong id="stat-total-users">0</strong><span>Jami user</span></article>
+        <article class="glass stat-card"><strong id="stat-subscribers">0</strong><span>Email obunachilar</span></article>
+        <article class="glass stat-card"><strong id="stat-email-users">0</strong><span>Email auth</span></article>
+        <article class="glass stat-card"><strong id="stat-google-users">0</strong><span>Google auth</span></article>
+        <article class="glass stat-card"><strong id="stat-linked-users">0</strong><span>Ikkalasi ulangan</span></article>
+        <article class="glass stat-card"><strong id="stat-campaigns">0</strong><span>Broadcastlar</span></article>
+      </section>
+
+      <section class="admin-grid">
+        <article class="glass admin-card reveal-up">
+          <div class="card-head">
+            <h2>Foydalanuvchilar</h2>
+            <span class="muted">Ro‘yxat va auth holati</span>
+          </div>
+          <div class="table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Foydalanuvchi</th>
+                  <th>Email</th>
+                  <th>Kirish usuli</th>
+                  <th>Qo‘shilgan sana</th>
+                  <th>Obuna</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-body"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="glass admin-card reveal-up delay-1">
+          <div class="card-head">
+            <h2>Broadcast yaratish</h2>
+            <span class="muted">Brendlangan email kampaniyasi</span>
+          </div>
+          <div class="admin-form-grid">
+            <label>
+              <span>Subject</span>
+              <input id="campaign-subject" type="text" placeholder="Bu hafta EduFlow ichida nima yangilik?" />
+            </label>
+            <label>
+              <span>Preheader</span>
+              <input id="campaign-preheader" type="text" placeholder="Workshoplar, mentorlik va yopiq update" />
+            </label>
+            <label>
+              <span>Sarlavha</span>
+              <input id="campaign-title" type="text" placeholder="Community uchun yangi imkoniyatlar" />
+            </label>
+            <label>
+              <span>Button text</span>
+              <input id="campaign-button-text" type="text" placeholder="Profilni ochish" />
+            </label>
+            <label class="full-width">
+              <span>Button URL</span>
+              <input id="campaign-button-url" type="url" placeholder="https://your-site.netlify.app/profile.html" />
+            </label>
+            <label class="full-width">
+              <span>Summary</span>
+              <textarea id="campaign-summary" rows="3" placeholder="Qisqa summary"></textarea>
+            </label>
+            <label class="full-width">
+              <span>Asosiy xabar</span>
+              <textarea id="campaign-message" rows="8" placeholder="Har bir yangi paragrafni yangi qatordan yozing"></textarea>
+            </label>
+          </div>
+
+          <div class="campaign-actions">
+            <button id="preview-fill-btn" class="button button-secondary" type="button">Demo bilan to‘ldirish</button>
+            <button id="send-campaign-btn" class="button button-primary" type="button">Hamma obunachilarga yuborish</button>
+          </div>
+          <p class="fine-print">Xatlar har bir userga alohida yuboriladi. Yuborilgan, yuborilmagan va xatoliklar report ko‘rinishida saqlanadi.</p>
+          <div id="campaign-result" class="inline-status neutral">Hali kampaniya yuborilmadi.</div>
+        </article>
+      </section>
+
+      <section class="admin-grid second-grid">
+        <article class="glass admin-card reveal-up">
+          <div class="card-head">
+            <h2>Email preview</h2>
+            <span class="muted">Yuborilishdan oldingi ko‘rinish</span>
+          </div>
+          <div id="campaign-preview" class="email-preview"></div>
+        </article>
+
+        <article class="glass admin-card reveal-up delay-1">
+          <div class="card-head">
+            <h2>So‘nggi kampaniyalar</h2>
+            <span class="muted">Tarix va natijalar</span>
+          </div>
+          <div id="campaign-history" class="history-list"></div>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <div id="toast-root" class="toast-root"></div>
+
+  <script src="/js/common.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>
