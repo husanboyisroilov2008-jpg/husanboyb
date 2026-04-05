@@ -1,3 +1,4 @@
+const { connectLambda } = require('@netlify/blobs');
 const { badRequest, methodNotAllowed, ok, serverError, unauthorized } = require('./_lib/response');
 const { requireAdmin } = require('./_lib/auth');
 const { getUsers, addCampaign } = require('./_lib/storage');
@@ -12,7 +13,10 @@ function validateCampaign(body) {
 
 exports.handler = async function handler(event) {
   try {
+    connectLambda(event);
+
     if (event.httpMethod !== 'POST') return methodNotAllowed(['POST']);
+
     const admin = requireAdmin(event);
     if (!admin) return unauthorized('Admin sessiya topilmadi.');
 
@@ -29,7 +33,10 @@ exports.handler = async function handler(event) {
     const siteName = getSiteName();
     const siteTagline = getSiteTagline();
     const siteBaseUrl = getSiteBaseUrl(event);
-    if (!siteBaseUrl) return badRequest('Sayt URL aniqlanmadi. SITE_BASE_URL ni kiriting yoki Netlify domenini tekshiring.');
+
+    if (!siteBaseUrl) {
+      return badRequest('Sayt URL aniqlanmadi. SITE_BASE_URL ni kiriting yoki Netlify domenini tekshiring.');
+    }
 
     const mailer = getMailer();
     await mailer.verify();
