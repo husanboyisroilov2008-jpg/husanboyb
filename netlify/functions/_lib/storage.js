@@ -43,9 +43,12 @@ async function upsertUser(nextUser) {
   }
 
   await setUsers(users);
+
   return (
     users.find(
-      (item) => item.sub === nextUser.sub || normalizeEmail(item.email || '') === normalizedEmail
+      (item) =>
+        item.sub === nextUser.sub ||
+        normalizeEmail(item.email || '') === normalizedEmail
     ) || null
   );
 }
@@ -53,9 +56,13 @@ async function upsertUser(nextUser) {
 async function findUserBySubOrEmail({ sub, email }) {
   const users = await getUsers();
   const normalizedEmail = normalizeEmail(email || '');
+
   return (
     users.find(
-      (item) => item.sub === sub || (normalizedEmail && normalizeEmail(item.email || '') === normalizedEmail)
+      (item) =>
+        item.sub === sub ||
+        (normalizedEmail &&
+          normalizeEmail(item.email || '') === normalizedEmail)
     ) || null
   );
 }
@@ -65,7 +72,10 @@ async function findUserByEmail(email) {
 }
 
 function verificationKey(email, purpose = 'signup') {
-  const hash = crypto.createHash('sha256').update(normalizeEmail(email)).digest('hex');
+  const hash = crypto
+    .createHash('sha256')
+    .update(normalizeEmail(email))
+    .digest('hex');
   return `verification:${purpose}:${hash}`;
 }
 
@@ -74,13 +84,10 @@ async function getPendingVerification(email, purpose = 'signup') {
 }
 
 async function setPendingVerification(email, data, purpose = 'signup') {
-  await store().setJSON(
-    verificationKey(email, purpose),
-    {
-      ...data,
-      email: normalizeEmail(email)
-    }
-  );
+  await store().setJSON(verificationKey(email, purpose), {
+    ...data,
+    email: normalizeEmail(email)
+  });
 }
 
 async function clearPendingVerification(email, purpose = 'signup') {
@@ -100,11 +107,21 @@ async function addCampaign(campaign) {
 
 function computeStats(users, campaigns = []) {
   const todayIso = new Date().toISOString().slice(0, 10);
-  const newToday = users.filter((user) => String(user.joinedAt || '').slice(0, 10) === todayIso).length;
-  const subscribedUsers = users.filter((user) => user.receiveEmails !== false && user.email).length;
-  const googleUsers = users.filter((user) => (user.authMethods || []).includes('google')).length;
-  const emailUsers = users.filter((user) => (user.authMethods || []).includes('email')).length;
-  const linkedUsers = users.filter((user) => (user.authMethods || []).length > 1).length;
+  const newToday = users.filter(
+    (user) => String(user.joinedAt || '').slice(0, 10) === todayIso
+  ).length;
+  const subscribedUsers = users.filter(
+    (user) => user.receiveEmails !== false && user.email
+  ).length;
+  const googleUsers = users.filter((user) =>
+    (user.authMethods || []).includes('google')
+  ).length;
+  const emailUsers = users.filter((user) =>
+    (user.authMethods || []).includes('email')
+  ).length;
+  const linkedUsers = users.filter(
+    (user) => (user.authMethods || []).length > 1
+  ).length;
   const verifiedEmails = users.filter((user) => user.emailVerified).length;
 
   return {
