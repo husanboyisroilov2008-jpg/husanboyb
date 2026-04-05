@@ -2,14 +2,16 @@ const crypto = require('crypto');
 const { getStore } = require('@netlify/blobs');
 const { normalizeEmail } = require('./password');
 
-const store = getStore('eduflow-hub-store');
+function store() {
+  return getStore('eduflow-hub-store');
+}
 
 async function getUsers() {
-  return (await store.get('users:list', { type: 'json' })) || [];
+  return (await store().get('users:list', { type: 'json' })) || [];
 }
 
 async function setUsers(users) {
-  await store.setJSON('users:list', users);
+  await store().setJSON('users:list', users);
   return users;
 }
 
@@ -20,7 +22,9 @@ function uniqueAuthMethods(list = []) {
 async function upsertUser(nextUser) {
   const users = await getUsers();
   const normalizedEmail = normalizeEmail(nextUser.email || '');
-  const index = users.findIndex((item) => item.sub === nextUser.sub || normalizeEmail(item.email || '') === normalizedEmail);
+  const index = users.findIndex(
+    (item) => item.sub === nextUser.sub || normalizeEmail(item.email || '') === normalizedEmail
+  );
 
   const safeIncoming = {
     ...nextUser,
@@ -29,20 +33,31 @@ async function upsertUser(nextUser) {
   };
 
   if (index >= 0) {
-    const mergedAuth = uniqueAuthMethods([...(users[index].authMethods || []), ...(safeIncoming.authMethods || [])]);
+    const mergedAuth = uniqueAuthMethods([
+      ...(users[index].authMethods || []),
+      ...(safeIncoming.authMethods || [])
+    ]);
     users[index] = { ...users[index], ...safeIncoming, authMethods: mergedAuth };
   } else {
     users.push({ ...safeIncoming, authMethods: safeIncoming.authMethods || [] });
   }
 
   await setUsers(users);
-  return users.find((item) => item.sub === nextUser.sub || normalizeEmail(item.email || '') === normalizedEmail);
+  return (
+    users.find(
+      (item) => item.sub === nextUser.sub || normalizeEmail(item.email || '') === normalizedEmail
+    ) || null
+  );
 }
 
 async function findUserBySubOrEmail({ sub, email }) {
   const users = await getUsers();
   const normalizedEmail = normalizeEmail(email || '');
-  return users.find((item) => item.sub === sub || (normalizedEmail && normalizeEmail(item.email || '') === normalizedEmail)) || null;
+  return (
+    users.find(
+      (item) => item.sub === sub || (normalizedEmail && normalizeEmail(item.email || '') === normalizedEmail)
+    ) || null
+  );
 }
 
 async function findUserByEmail(email) {
@@ -55,28 +70,31 @@ function verificationKey(email, purpose = 'signup') {
 }
 
 async function getPendingVerification(email, purpose = 'signup') {
-  return (await store.get(verificationKey(email, purpose), { type: 'json' })) || null;
+  return (await store().get(verificationKey(email, purpose), { type: 'json' })) || null;
 }
 
 async function setPendingVerification(email, data, purpose = 'signup') {
-  await store.setJSON(verificationKey(email, purpose), {
-    ...data,
-    email: normalizeEmail(email)
-  });
+  await store().setJSON(
+    verificationKey(email, purpose),
+    {
+      ...data,
+      email: normalizeEmail(email)
+    }
+  );
 }
 
 async function clearPendingVerification(email, purpose = 'signup') {
-  await store.delete(verificationKey(email, purpose));
+  await store().delete(verificationKey(email, purpose));
 }
 
 async function getCampaigns() {
-  return (await store.get('campaigns:list', { type: 'json' })) || [];
+  return (await store().get('campaigns:list', { type: 'json' })) || [];
 }
 
 async function addCampaign(campaign) {
   const campaigns = await getCampaigns();
   campaigns.unshift(campaign);
-  await store.setJSON('campaigns:list', campaigns.slice(0, 50));
+  await store().setJSON('campaigns:list', campaigns.slice(0, 50));
   return campaigns;
 }
 
