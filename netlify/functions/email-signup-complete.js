@@ -1,7 +1,16 @@
+const { connectLambda } = require('@netlify/blobs');
 const crypto = require('crypto');
 const { badRequest, methodNotAllowed, ok, serverError } = require('./_lib/response');
 const { normalizeEmail } = require('./_lib/password');
-const { clearPendingVerification, findUserByEmail, getCampaigns, getUsers, getPendingVerification, upsertUser, computeStats } = require('./_lib/storage');
+const {
+  clearPendingVerification,
+  findUserByEmail,
+  getCampaigns,
+  getUsers,
+  getPendingVerification,
+  upsertUser,
+  computeStats
+} = require('./_lib/storage');
 const { createUserSession, verifySignedPayload } = require('./_lib/session');
 
 function cleanName(value = '') {
@@ -10,7 +19,10 @@ function cleanName(value = '') {
 
 exports.handler = async function handler(event) {
   try {
+    connectLambda(event);
+
     if (event.httpMethod !== 'POST') return methodNotAllowed(['POST']);
+
     const body = JSON.parse(event.body || '{}');
     const ticket = String(body.signupTicket || '');
     const givenName = cleanName(body.givenName);
@@ -27,12 +39,14 @@ exports.handler = async function handler(event) {
 
     const email = normalizeEmail(payload.email || '');
     const pending = await getPendingVerification(email, 'signup');
+
     if (!pending || !pending.verified) {
       return badRequest('Email hali tasdiqlanmagan. Avval kodni kiriting.');
     }
 
     const existing = await findUserByEmail(email);
     const now = new Date().toISOString();
+
     const nextUser = await upsertUser({
       sub: existing?.sub || `usr_${crypto.randomBytes(12).toString('hex')}`,
       email,
@@ -50,6 +64,7 @@ exports.handler = async function handler(event) {
     });
 
     await clearPendingVerification(email, 'signup');
+
     const users = await getUsers();
     const campaigns = await getCampaigns();
 
