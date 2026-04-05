@@ -1,3 +1,4 @@
+const { connectLambda } = require('@netlify/blobs');
 const { requireUser } = require('./_lib/auth');
 const { createAdminSession } = require('./_lib/session');
 const { getAdminCode, isAdminEmailAllowed } = require('./_lib/admin');
@@ -5,6 +6,8 @@ const { badRequest, forbidden, methodNotAllowed, ok, serverError, unauthorized }
 
 exports.handler = async function handler(event) {
   try {
+    connectLambda(event);
+
     if (event.httpMethod !== 'POST') return methodNotAllowed(['POST']);
 
     const user = await requireUser(event);
@@ -13,8 +16,11 @@ exports.handler = async function handler(event) {
     const body = JSON.parse(event.body || '{}');
     if (!body.code) return badRequest('Admin kod yuborilmadi.');
     if (body.code !== getAdminCode()) return forbidden('Admin kod noto‘g‘ri.');
+
     if (!isAdminEmailAllowed(user.email)) {
-      return forbidden('Bu email admin sifatida ruxsat etilmagan. ADMIN_ALLOWED_EMAILS ro‘yxatini tekshiring.');
+      return forbidden(
+        'Bu email admin sifatida ruxsat etilmagan. ADMIN_ALLOWED_EMAILS ro‘yxatini tekshiring.'
+      );
     }
 
     return ok({
